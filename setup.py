@@ -10,7 +10,7 @@ setup(
         "flask>=2.0.0",
         "flask-cors>=3.0.10",
         "gradio>=3.0.0",
-        "torch>=1.9.0",
+        "torch==2.4.0",
         "torchvision>=0.10.0",
         "numpy>=1.19.0",
         "pillow>=8.0.0",
