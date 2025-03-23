@@ -1,123 +1,26 @@
-# threedai: 3D Image AI Generator
+# ThreeDAI
 
-A Python package that creates a server running a GUI interface to a neural network, taking images as input and outputting videos and 3D object files (STEP format).
+Generate 3D models from images and text using TRELLIS.
 
 ## Installation
 
-### Basic Installation
-
 ```bash
 pip install threedai
 ```
-
-### Development Installation
-
-```bash
-git clone https://github.com/yourusername/threedai.git
-cd threedai
-pip install -e ".[dev]"
-```
-
-### 3D Model Generation Support
-
-For full 3D model generation support (STEP files), install with:
-
-```bash
-pip install -e ".[3d]"
-```
-
-Note: This requires OpenCASCADE to be installed on your system. See [PythonOCC installation instructions](https://github.com/tpaviot/pythonocc-core) for more details.
 
 ## Usage
 
-### Running the Full Application
-
-The easiest way to run the application is:
-
 ```bash
+# Run the GUI application
 python -m threedai
 ```
 
-This will start both the server and GUI components.
-
-### Running Server and GUI Separately
-
-Start the server:
-
-```bash
-threedai-server --host 0.0.0.0 --port 5000 --model /path/to/model/weights.pth
-```
-
-Start the GUI (connecting to the server):
-
-```bash
-threedai-gui --server http://localhost:5000 --share
-```
-
-The `--share` flag creates a public URL using Gradio sharing.
-
-### Programmatic Usage
+Or use programmatically:
 
 ```python
-import threedai
+from threedai.direct_integration import TrellisIntegration
 
-# Run both server and GUI
-threedai.run(server_port=5000, share_gui=True)
-
-# Or run them separately
-threedai.start_server(port=5000, model_path='path/to/model.pth')
-threedai.start_gui(server_url='http://localhost:5000')
+trellis = TrellisIntegration("path/to/model.pt")
+result = trellis.generate_3d_from_image("input.jpg", "a red chair")
+print(f"3D model saved to: {result['gaussian_path']}")
 ```
-
-## Development
-
-### Project Structure
-
-- `threedai/server/`: Flask server that handles API requests
-- `threedai/gui/`: Gradio-based GUI interface
-- `threedai/ml/`: Neural network model and inference code
-- `threedai/utils/`: Utility functions for visualization and format conversion
-
-### Running Tests
-
-```bash
-pytest
-```
-
-## License
-
-MIT
-```
-
-## Installation and Running Instructions
-
-1. **Install the package**:
-
-```bash
-pip install threedai
-```
-
-2. **Run the complete application (server + GUI)**:
-
-```bash
-python -m threedai
-```
-
-3. **Run server and GUI separately**:
-
-Server:
-```bash
-threedai-server --port 5000
-```
-
-GUI:
-```bash
-threedai-gui --server http://localhost:5000
-```
-
-4. **For development setup**:
-
-```bash
-git clone https://github.com/yourusername/threedai.git
-cd threedai
-pip install -e ".[dev,3d]"

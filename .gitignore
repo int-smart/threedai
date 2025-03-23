@@ -37,3 +37,6 @@ environment.yml
 
 ### System ###
 .DS_Store
+
+# Model
+models
