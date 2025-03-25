@@ -8,9 +8,6 @@ class Hunyuan:
         self.paint_pipeline = Hunyuan3DPaintPipeline.from_pretrained('tencent/Hunyuan3D-2')
 
     def __call__(self, image_path, prompt, generate_texture, **kwds):
-        self.flow_pipeline.cuda()
-        self.paint_pipeline.cuda()
-
         # Run the pipeline
         output = self.flow_pipeline(
             image=image_path
