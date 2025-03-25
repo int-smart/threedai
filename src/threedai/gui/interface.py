@@ -1,25 +1,32 @@
 import os
 import gradio as gr
 from ..ml.trellis import Trellis
+from ..ml.hunyuan import Hunyuan
 
-# Initialize the TRELLIS integration
-MODEL_PATH = os.environ.get("TRELLIS_MODEL_PATH", "path/to/trellis/model.pt")
+# Initialize the integration
+TRELLIS_MODEL_PATH = os.environ.get("TRELLIS_MODEL_PATH", "path/to/trellis/model.pt")
+HUNYUAN_MODEL_PATH = os.environ.get("HUNYUAN_MODEL_PATH", "path/to/hunyuan/model.pt")
 OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "outputs")
 
-trellis = Trellis()  # Assuming you want to use the default model
+trellis = Trellis()  # Initialize Trellis model
+hunyuan = Hunyuan()  # Initialize Hunyuan model
 
-def process_inputs(image, prompt):
+def process_inputs(image, prompt, model_choice="hunyuan"):
     """Process inputs and generate 3D model"""
     # Save the input image temporarily
     temp_image_path = os.path.join(OUTPUT_DIR, "temp_input.jpg")
     image.save(temp_image_path)
     
-    # Generate 3D model
-    outputs = trellis(temp_image_path, prompt)
+    # Generate 3D model based on selected model
+    if model_choice == "trellis":
+        output = trellis(temp_image_path, prompt)
+        gaussian_path = os.path.join(OUTPUT_DIR, "sample.ply")
+    else:
+        output = hunyuan(temp_image_path, prompt, generate_texture=True)
+        gaussian_path = output.export(output, "glb", os.path.join(OUTPUT_DIR, "sample.ply"))
     
     # Get paths to the generated files
     video_path = os.path.join(OUTPUT_DIR, "sample_gs.mp4")
-    gaussian_path = os.path.join(OUTPUT_DIR, "sample.ply")
     
     # Return paths to the generated files
     return video_path, gaussian_path
