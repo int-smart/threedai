@@ -7,17 +7,13 @@ OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "outputs")
 
 hunyuan = Hunyuan()  # Initialize Hunyuan model
 
-def process_inputs(image, prompt, model_choice="hunyuan"):
+def process_inputs(image_path, prompt, model_choice="hunyuan"):
     """Process inputs and generate 3D model"""
-    # Save the input image temporarily
-    temp_image_path = os.path.join(OUTPUT_DIR, "temp_input.jpg")
-    image.save(temp_image_path)
-    
     # Generate 3D model based on selected model
     if model_choice == "trellis":
         return ""
     else:
-        output = hunyuan(temp_image_path, prompt, generate_texture=True)
+        output = hunyuan(image_path, prompt, generate_texture=True)
         glb_path = output.export(output, "glb", os.path.join(OUTPUT_DIR, "output.ply"))
   
     # Return paths to the generated files
