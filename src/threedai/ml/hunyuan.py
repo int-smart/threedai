@@ -11,7 +11,7 @@ class Hunyuan:
         # Run the pipeline
         output = self.flow_pipeline(
             image=image_path
-        )
+        )[0]
 
         if generate_texture:
             output = self.paint_pipeline(output, image=image_path)
