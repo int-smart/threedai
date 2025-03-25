@@ -1,4 +1,3 @@
-import imageio
 from hy3dgen.texgen import Hunyuan3DPaintPipeline
 from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
 
