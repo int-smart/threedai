@@ -6,6 +6,9 @@ setup(
     package_dir={"": "src"},  # Tell setuptools packages are under src
     packages=find_packages(where="src"),  # Find packages in src directory
     include_package_data=True,
+    package_data={
+        "threedai": ["gui/assets/*.css"],
+    },
     install_requires=[
         "gradio>=3.0.0",
         "torch",
