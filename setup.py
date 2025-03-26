@@ -17,6 +17,7 @@ setup(
         "pillow>=8.0.0",
         "opencv-python>=4.5.0",
         "matplotlib>=3.4.0",
+        "imageio"
     ],
     extras_require={
         "dev": [
