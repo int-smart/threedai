@@ -156,7 +156,7 @@ with gr.Blocks(title="3D Generation", css=custom_css) as app:
         outputs=[video_output, model_output, status_output]
     )
 
-def main(share=False):
+def main(share=True):
     app.launch(share=share)
 
 if __name__ == "__main__":
