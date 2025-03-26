@@ -14,7 +14,7 @@ def process_inputs(image_path, prompt, model_choice="hunyuan"):
         return ""
     else:
         output = hunyuan(image_path, prompt, generate_texture=True)
-        glb_path = output.export(output, "glb", os.path.join(OUTPUT_DIR, "output.ply"))
+        glb_path = hunyuan.export(output, "glb", os.path.join(OUTPUT_DIR, "output.ply"))
   
     # Return paths to the generated files
     return glb_path
