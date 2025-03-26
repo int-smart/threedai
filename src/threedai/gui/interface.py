@@ -1,15 +1,34 @@
 import os
 import gradio as gr
+import configparser
 # from ..ml.hunyuan import Hunyuan
 
 # Initialize the integration
 OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "outputs")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# Determine which model is installed
+def get_installed_model():
+    config_path = os.path.expanduser("~/.threedai/config.ini")
+    if os.path.exists(config_path):
+        config = configparser.ConfigParser()
+        try:
+            # For simple key=value format without section headers
+            with open(config_path, 'r') as f:
+                config_string = '[DEFAULT]\n' + f.read()
+            config.read_string(config_string)
+            return config['DEFAULT'].get('model', 'hunyuan')
+        except Exception as e:
+            print(f"Error reading config: {e}")
+    return "hunyuan"  # Default if config doesn't exist or can't be read
 
 # hunyuan = Hunyuan()  # Initialize Hunyuan model
-
-def process_inputs(image_path, prompt, model_choice="hunyuan"):
+# Get the installed model
+INSTALLED_MODEL = get_installed_model()
+def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
     """Process inputs and generate 3D model"""
     glb_path = None
+    print(f"Using {INSTALLED_MODEL}")
     # Generate 3D model based on selected model
     if model_choice == "trellis":
         return ""

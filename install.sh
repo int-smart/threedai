@@ -18,6 +18,12 @@ pip install torch torchvision
 # Install your package
 pip install -e .
 
+# Create config directory if it doesn't exist
+mkdir -p ~/.threedai
+
+# Record which model was installed
+echo "model=$MODEL" > ~/.threedai/config.ini
+
 # Install specific model based on argument
 if [ "$MODEL" = "hunyuan" ]; then
     # Install Hunyuan3D-2
