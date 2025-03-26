@@ -35,6 +35,7 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
         from PIL import Image
         from trellis.pipelines import TrellisImageTo3DPipeline
         from trellis.utils import render_utils, postprocessing_utils
+        os.environ['ATTN_BACKEND'] = 'xformers'
 
         # Load a pipeline from a model folder or a Hugging Face model hub.
         pipeline = TrellisImageTo3DPipeline.from_pretrained("JeffreyXiang/TRELLIS-image-large")
@@ -47,31 +48,30 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
         outputs = pipeline.run(
             image,
             seed=1,
-            # Optional parameters
-            # sparse_structure_sampler_params={
-            #     "steps": 12,
-            #     "cfg_strength": 7.5,
-            # },
-            # slat_sampler_params={
-            #     "steps": 12,
-            #     "cfg_strength": 3,
-            # },
         )
-        # outputs is a dictionary containing generated 3D assets in different formats:
-        # - outputs['gaussian']: a list of 3D Gaussians
-        # - outputs['radiance_field']: a list of radiance fields
-        # - outputs['mesh']: a list of meshes
 
-        # Render the outputs
+        # Generate video output
         video = render_utils.render_video(outputs['gaussian'][0])['color']
-        imageio.mimsave(os.path.join(OUTPUT_DIR,"sample_gs.mp4"), video, fps=30)
-        return ""
-    # else:
+        video_path = os.path.join(OUTPUT_DIR, "output_video.mp4")
+        imageio.mimsave(video_path, video, fps=30)
+
+        # Generate GLB model
+        glb = postprocessing_utils.to_glb(
+            outputs['gaussian'][0],
+            outputs['mesh'][0],
+            simplify=0.95,
+            texture_size=1024,
+        )
+        glb_path = os.path.join(OUTPUT_DIR, "output.glb")
+        glb.export(glb_path)
+
+        # Return paths and status
+        return video_path, glb_path, "Generation completed successfully!"    # else:
     #     output = hunyuan(image_path, prompt, generate_texture=True)
     #     glb_path = hunyuan.export(output, "glb", os.path.join(OUTPUT_DIR, "output.ply"))
   
     # Return paths to the generated files
-    return glb_path
+    return ""
 
 # Get the path to the CSS file
 def get_css_path():
