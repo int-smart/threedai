@@ -27,7 +27,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "threedai-gui=threedai.gui.interface:start_gui",
+            "threedai-gui=threedai.gui.interface:main",
         ],
     },
 )
