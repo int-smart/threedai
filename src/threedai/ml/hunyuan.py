@@ -15,7 +15,7 @@ class Hunyuan:
 
         if generate_texture:
             output = self.paint_pipeline(output, image=image_path)
-
+        print("Done with the pipeline")
         return output
 
     def export(self, mesh, type, output_path):
