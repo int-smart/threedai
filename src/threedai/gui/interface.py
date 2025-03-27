@@ -43,8 +43,10 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
 
         # Load an image
         print("image_path is ", image_path)
-        image = Image.open(image_path)
-
+        if isinstance(image_path, Image.Image):
+            image = image_path
+        else:
+            image = Image.open(image_path)
         # Run the pipeline
         outputs = pipeline.run(
             image,
