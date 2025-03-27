@@ -2,7 +2,6 @@ import os
 import gradio as gr
 import configparser
 import imageio
-# from ..ml.hunyuan import Hunyuan
 
 # Initialize the integration
 OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "outputs")
@@ -23,7 +22,6 @@ def get_installed_model():
             print(f"Error reading config: {e}")
     return "hunyuan"  # Default if config doesn't exist or can't be read
 
-# hunyuan = Hunyuan()  # Initialize Hunyuan model
 # Get the installed model
 INSTALLED_MODEL = get_installed_model()
 def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
@@ -35,6 +33,7 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
         from PIL import Image
         from trellis.pipelines import TrellisImageTo3DPipeline
         from trellis.utils import render_utils, postprocessing_utils
+        from threedai.utils.format_converter import glb_to_stl
         os.environ['ATTN_BACKEND'] = 'xformers'
 
         # Load a pipeline from a model folder or a Hugging Face model hub.
@@ -68,15 +67,25 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
         glb_path = os.path.join(OUTPUT_DIR, "output.glb")
         glb.export(glb_path)
 
+        # Convert GLB to STL
+        stl_path = os.path.join(OUTPUT_DIR, "output.stl") 
+        glb_to_stl(glb_path, stl_path)
+
         # Return paths and status
-        return video_path, glb_path, "Generation completed successfully!"    # else:
-    #     output = hunyuan(image_path, prompt, generate_texture=True)
-    #     glb_path = hunyuan.export(output, "glb", os.path.join(OUTPUT_DIR, "output.ply"))
+        return video_path, stl_path, "Generation completed successfully!"    
+    else:
+        from ..ml.hunyuan import Hunyuan
+        from threedai.utils.format_converter import glb_to_step
+        hunyuan = Hunyuan()  # Initialize Hunyuan model
+        output = hunyuan(image_path, prompt, generate_texture=True)
+        glb_path = hunyuan.export(output, "glb", os.path.join(OUTPUT_DIR, "output.glb"))
+        stl_path = os.path.join(OUTPUT_DIR, "output.stl")
+        glb_to_stl(glb_path, stl_path)
+        return "", stl_path, "Generation completed successfully!"
   
     # Return paths to the generated files
     return ""
 
-# Get the path to the CSS file
 def get_css_path():
     try:
         # When installed as a package
