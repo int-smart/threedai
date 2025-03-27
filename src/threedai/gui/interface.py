@@ -42,6 +42,7 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
         pipeline.cuda()
 
         # Load an image
+        print("image_path is ", image_path)
         image = Image.open(image_path)
 
         # Run the pipeline

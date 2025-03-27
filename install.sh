@@ -45,8 +45,9 @@ elif [ "$MODEL" = "trellis" ]; then
     cd TRELLIS
     pip install torch==2.4.0 torchvision==0.19.0 --extra-index-url https://download.pytorch.org/whl/cu118
     . ./setup.sh --basic --xformers --diffoctreerast --spconv --mipgaussian --kaolin --nvdiffrast
-    pip install xformers==0.0.27.post2
+    pip install xformers==0.0.27.post2 --index-url https://download.pytorch.org/whl/cu118
     pip install kaolin==0.17.0 -f https://nvidia-kaolin.s3.us-east-2.amazonaws.com/torch-2.4.0_cu118.html
+    pip install https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.0.4/flash_attn-2.7.3+cu118torch2.4-cp310-cp310-linux_x86_64.whl
 fi
 
 echo "Installation complete!"
