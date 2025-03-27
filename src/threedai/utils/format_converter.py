@@ -77,14 +77,24 @@ def glb_to_stl(glb_path, stl_path):
             return False
             
         # Load the GLB file
-        mesh = trimesh.load(glb_path)
+        loaded = trimesh.load(glb_path)
         
-        # Extract vertices and faces
-        vertices = np.array(mesh.vertices)
-        faces = np.array(mesh.faces)
-        
-        # Convert to STL using the mesh_to_stl function
-        return mesh_to_stl(vertices, faces, stl_path)
+        # Handle both Scene and Mesh objects
+        if isinstance(loaded, trimesh.Scene):
+            # If it's a scene, export directly to STL
+            # This will combine all meshes in the scene
+            loaded.export(stl_path, file_type='stl')
+            return True
+        elif isinstance(loaded, trimesh.Trimesh):
+            # If it's a single mesh, extract vertices and faces
+            vertices = np.array(loaded.vertices)
+            faces = np.array(loaded.faces)
+            
+            # Convert to STL using the mesh_to_stl function
+            return mesh_to_stl(vertices, faces, stl_path)
+        else:
+            print(f"Error: Unsupported object type: {type(loaded)}")
+            return False
         
     except ImportError:
         print("Warning: trimesh not available. Cannot convert GLB to STL.")

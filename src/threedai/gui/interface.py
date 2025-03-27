@@ -68,7 +68,7 @@ def process_inputs(image_path, prompt, model_choice=INSTALLED_MODEL):
         glb.export(glb_path)
 
         # Convert GLB to STL
-        stl_path = os.path.join(OUTPUT_DIR, "output.stl") 
+        stl_path = os.path.join(OUTPUT_DIR, "output.stl")
         glb_to_stl(glb_path, stl_path)
 
         # Return paths and status
